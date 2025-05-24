@@ -1,0 +1,1529 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Browse Students - PeerConnect</title>
+  <link href="src/output.css" rel="stylesheet" />
+  <script src="src/navbar.js" defer></script>
+  <link rel="shortcut icon" href="img/peerconnect.png" type="image/x-icon">
+</head>
+
+<body class="bg-backgroundDark text-textDark dark:bg-backgroundDark dark:text-textDark transition-colors duration-500">
+  <nav class="bg-white fixed w-full z-50 border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16 items-center">
+        <div class="flex items-center space-x-4">
+          <a href="index.html" class="flex items-center">
+            <img src="img/peerconnect.png" alt="PeerConnect Logo" class="h-10 w-auto" />
+            <span class="ml-2 font-bold text-lg text-green-600">PeerConnect</span>
+          </a>
+          <div class="hidden md:flex space-x-4 items-center">
+            <a href="index.html"
+              class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-800 hover:text-green-600 transition">Home</a>
+            <a href="dashboard.html"
+              class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-800 hover:text-green-600 transition">Dashboard</a>
+            <a href="browse.html"
+              class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-800 hover:text-green-600 transition">Browse
+              Students</a>
+            <a href="network.html"
+              class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-800 hover:text-green-600 transition">Network</a>
+            <input type="search" placeholder="Search..."
+              class="ml-6 px-3 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-peerconnectGreen-medium" />
+          </div>
+        </div>
+        <div class="hidden md:flex items-center space-x-4">
+          <button id="theme-toggle" aria-label="Toggle Dark Mode" class="p-2 rounded-md text-gray-800 hover:text-green-600 focus:outline-none focus:ring-2 focus:ring-peerconnectGreen-medium transition">
+            <svg id="theme-toggle-light-icon" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zM4.22 4.22a1 1 0 011.42 0L6.64 5.22a1 1 0 11-1.42 1.42L4.22 5.64a1 1 0 010-1.42zM2 10a1 1 0 011-1h1a1 1 0 110 2H3a1 1 0 01-1-1zm8 6a1 1 0 011-1v-1a1 1 0 10-2 0v1a1 1 0 011 1zm5.78-2.22a1 1 0 00-1.42 0l-1 1a1 1 0 101.42 1.42l1-1a1 1 0 000-1.42zM17 10a1 1 0 00-1-1h-1a1 1 0 100 2h1a1 1 0 001-1zm-3.22-5.78a1 1 0 00-1.42 1.42l1 1a1 1 0 001.42-1.42l-1-1zM10 14a4 4 0 100-8 4 4 0 000 8z"></path>
+            </svg>
+            <svg id="theme-toggle-dark-icon" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+              <path d="M17.293 13.293a8 8 0 01-11.586-11.586 8 8 0 0011.586 11.586z"></path>
+            </svg>
+          </button>
+          <a href="profile.html"
+            class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-800 hover:text-green-600 transition dark:text-textDark dark:hover:text-peerconnectGreen-light">Profile</a>
+          <a href="signin.html"
+            class="nav-link px-3 py-2 rounded-md text-sm font-medium text-white bg-green-600 hover:bg-green-700 transition dark:bg-peerconnectGreen-dark dark:hover:bg-peerconnectGreen-darkAccent">Sign
+            In</a>
+        </div>
+        <div class="flex md:hidden">
+          <button id="mobile-menu-button" aria-label="Toggle menu"
+            class="text-gray-800 hover:text-peerconnectGreen-medium focus:outline-none focus:ring-2 focus:ring-peerconnectGreen-medium rounded-md">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div id="mobile-menu" class="hidden md:hidden">
+      <a href="index.html" class="block px-4 py-2 text-gray-800 hover:bg-peerconnectGreen-light">Home</a>
+      <a href="dashboard.html" class="block px-4 py-2 text-gray-800 hover:bg-peerconnectGreen-light">Dashboard</a>
+      <a href="browse.html" class="block px-4 py-2 text-gray-800 hover:bg-peerconnectGreen-light">Browse Students</a>
+      <a href="network.html" class="block px-4 py-2 text-gray-800 hover:bg-peerconnectGreen-light">Network</a>
+      <a href="profile.html" class="block px-4 py-2 text-gray-800 hover:bg-peerconnectGreen-light">Profile</a>
+      <a href="signin.html"
+        class="nav-link px-3 py-2 rounded-md text-sm font-medium text-white bg-green-600 hover:bg-green-700 transition">Sign
+        In</a>
+    </div>
+  </nav>
+
+  <main class="pt-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+    <h1 class="text-4xl font-bold mb-6">Browse Students</h1>
+
+    <!-- Search and Filters -->
+    <div class="bg-white p-4 rounded-lg shadow-md">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="md:col-span-2">
+          <input type="search" placeholder="Search by name or interests..."
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500">
+        </div>
+        <select
+          class="px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500">
+          <option value="">All Departments</option>
+          <option value="computer">Computer Engineering</option>
+          <option value="mechanical">Mechanical Engineering</option>
+          <option value="electrical">Electrical Engineering</option>
+          <option value="electrical">Information Technology</option>
+          <option value="electrical">Civil Engineering</option>
+          <option value="electrical">Robotics Engineering</option>
+          <option value="electrical">Electronics & Telecommunication</option>
+          <option value="electrical">Cyber Security</option>
+          <option value="electrical">Artificial Intelligence & Data Science</option>
+          <option value="electrical">Mechatronics Engineering</option>
+
+        </select>
+        <select
+          class="px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500">
+          <option value="">All Years</option>
+          <option value="1">First Year</option>
+          <option value="2">Second Year</option>
+          <option value="3">Third Year</option>
+          <option value="4">Fourth Year</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Student Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Student Card 1 -->
+
+
+      <!-- Male Student -->
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/men/41.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Aditya Patil</h3>
+              <p class="text-sm text-gray-600">Computer Engineering • 2nd Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Blockchain</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Web3</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Smart Contracts</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+      <!-- Female Student -->
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/women/42.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Tanvi Desai</h3>
+              <p class="text-sm text-gray-600">Information Technology • 3rd Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">UI/UX Design</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Flutter</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Firebase</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+      <!-- Male/Female Pair 3 -->
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/men/43.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Rohit Sharma</h3>
+              <p class="text-sm text-gray-600">Mechanical Engineering • 2nd Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">CAD/CAM</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">3D Printing</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Ananya Singh</h3>
+              <p class="text-sm text-gray-600">Electronics Engineering • 4th Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">VLSI Design</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Embedded Systems</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/men/40.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Aryan Pillai</h3>
+              <p class="text-sm text-gray-600">Information Technology • 2nd Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Networks</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Cyber Security</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Cloud Computing</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/women/41.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Tanya Shetty</h3>
+              <p class="text-sm text-gray-600">Civil Engineering • 1st Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">AutoCAD</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">STAAD Pro</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Surveying</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/men/42.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Krishna Thakur</h3>
+              <p class="text-sm text-gray-600">Robotics Engineering • 3rd Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">ROS</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">MATLAB</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Control Systems</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/women/43.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Ritika Thakur</h3>
+              <p class="text-sm text-gray-600">Electronics & Telecommunication • 3rd Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Antennas</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">VHDL</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">FPGA</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/men/44.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Sahil Chavan</h3>
+              <p class="text-sm text-gray-600">Mechanical Engineering • 2nd Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Thermodynamics</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">AutoCAD</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">SolidWorks</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Tanya Thakur</h3>
+              <p class="text-sm text-gray-600">Robotics Engineering • 1st Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">ROS</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">MATLAB</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Control Systems</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/men/46.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Ritik Rao</h3>
+              <p class="text-sm text-gray-600">Mechatronics Engineering • 2nd Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Sensors</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">PLC</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">LabVIEW</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/women/47.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Ritika Iyer</h3>
+              <p class="text-sm text-gray-600">Robotics Engineering • 4th Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">ROS</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">MATLAB</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Control Systems</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/men/48.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Krishna Shetty</h3>
+              <p class="text-sm text-gray-600">Mechanical Engineering • 2nd Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Thermodynamics</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">AutoCAD</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">SolidWorks</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/women/48.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Anaya Shetty</h3>
+              <p class="text-sm text-gray-600">Electronics Engineering • 1st Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Signal Processing</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Embedded C</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Circuit Design</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/men/50.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Dev Pillai</h3>
+              <p class="text-sm text-gray-600">Computer Engineering • 3rd Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">C++</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Java</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Operating Systems</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/women/49.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Niharika Pillai</h3>
+              <p class="text-sm text-gray-600">Cyber Security • 2nd Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Burp Suite</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Nmap</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Metasploit</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/men/52.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Ritik Rana</h3>
+              <p class="text-sm text-gray-600">Robotics Engineering • 1st Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">ROS</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">MATLAB</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Control Systems</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/women/53.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Myra Kulkarni</h3>
+              <p class="text-sm text-gray-600">Mechanical Engineering • 3rd Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Thermodynamics</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">AutoCAD</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">SolidWorks</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/men/54.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Ritik Rana</h3>
+              <p class="text-sm text-gray-600">Artificial Intelligence & Data Science • 4th Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Pandas</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Scikit-learn</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">TensorFlow</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/women/54.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Tanya Pillai</h3>
+              <p class="text-sm text-gray-600">Electronics & Telecommunication • 4th Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Antennas</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">VHDL</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">FPGA</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/men/56.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Karthik Pillai</h3>
+              <p class="text-sm text-gray-600">Cyber Security • 4th Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Burp Suite</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Nmap</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Metasploit</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/women/57.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Ira Bhatt</h3>
+              <p class="text-sm text-gray-600">Civil Engineering • 3rd Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">AutoCAD</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">STAAD Pro</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Surveying</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/men/58.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Dev Rana</h3>
+              <p class="text-sm text-gray-600">Information Technology • 3rd Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Networks</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Cyber Security</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Cloud Computing</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/women/58.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Meera Rao</h3>
+              <p class="text-sm text-gray-600">Cyber Security • 3rd Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Burp Suite</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Nmap</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Metasploit</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/men/60.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Raj Naik</h3>
+              <p class="text-sm text-gray-600">Computer Engineering • 3rd Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">C++</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Java</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Operating Systems</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/women/61.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Saanvi Rao</h3>
+              <p class="text-sm text-gray-600">Computer Engineering • 2nd Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">C++</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Java</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Operating Systems</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/men/62.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Ritik Naik</h3>
+              <p class="text-sm text-gray-600">Mechatronics Engineering • 4th Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Sensors</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">PLC</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">LabVIEW</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/women/63.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Ritika Shetty</h3>
+              <p class="text-sm text-gray-600">Artificial Intelligence & Data Science • 1st Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Pandas</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Scikit-learn</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">TensorFlow</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/men/64.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Aarav Naik</h3>
+              <p class="text-sm text-gray-600">Electronics Engineering • 2nd Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Signal Processing</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Embedded C</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Circuit Design</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/women/64.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Saanvi Thakur</h3>
+              <p class="text-sm text-gray-600">Civil Engineering • 4th Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">AutoCAD</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">STAAD Pro</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Surveying</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/men/66.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Yash Rao</h3>
+              <p class="text-sm text-gray-600">Computer Engineering • 3rd Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">C++</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Java</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Operating Systems</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/women/67.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Myra Rao</h3>
+              <p class="text-sm text-gray-600">Mechanical Engineering • 3rd Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Thermodynamics</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">AutoCAD</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">SolidWorks</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/men/68.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Aarav Naik</h3>
+              <p class="text-sm text-gray-600">Electronics Engineering • 3rd Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Signal Processing</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Embedded C</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Circuit Design</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Meera Rao</h3>
+              <p class="text-sm text-gray-600">Artificial Intelligence & Data Science • 4th Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Pandas</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Scikit-learn</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">TensorFlow</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/men/70.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Raj Thakur</h3>
+              <p class="text-sm text-gray-600">Robotics Engineering • 3rd Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">ROS</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">MATLAB</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Control Systems</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/women/71.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Ira Iyer</h3>
+              <p class="text-sm text-gray-600">Electronics Engineering • 4th Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Signal Processing</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Embedded C</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Circuit Design</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/men/72.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Aryan Rao</h3>
+              <p class="text-sm text-gray-600">Mechatronics Engineering • 4th Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Sensors</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">PLC</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">LabVIEW</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/women/73.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Tanya Iyer</h3>
+              <p class="text-sm text-gray-600">Mechatronics Engineering • 1st Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Sensors</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">PLC</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">LabVIEW</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/men/74.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Dev Bhatt</h3>
+              <p class="text-sm text-gray-600">Civil Engineering • 3rd Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">AutoCAD</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">STAAD Pro</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Surveying</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/women/75.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Niharika Iyer</h3>
+              <p class="text-sm text-gray-600">Mechatronics Engineering • 4th Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Sensors</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">PLC</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">LabVIEW</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/men/76.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Aryan Shetty</h3>
+              <p class="text-sm text-gray-600">Robotics Engineering • 1st Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">ROS</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">MATLAB</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Control Systems</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/women/76.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Myra Thakur</h3>
+              <p class="text-sm text-gray-600">Mechatronics Engineering • 3rd Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Sensors</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">PLC</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">LabVIEW</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/men/78.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Karthik Chavan</h3>
+              <p class="text-sm text-gray-600">Electronics & Telecommunication • 3rd Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Antennas</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">VHDL</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">FPGA</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/women/79.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Saanvi Rana</h3>
+              <p class="text-sm text-gray-600">Electronics & Telecommunication • 3rd Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Antennas</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">VHDL</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">FPGA</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/men/80.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Aarav Naik</h3>
+              <p class="text-sm text-gray-600">Artificial Intelligence & Data Science • 4th Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Pandas</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Scikit-learn</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">TensorFlow</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/women/80.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Saanvi Pillai</h3>
+              <p class="text-sm text-gray-600">Robotics Engineering • 4th Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">ROS</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">MATLAB</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Control Systems</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/men/82.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Sahil Naik</h3>
+              <p class="text-sm text-gray-600">Computer Engineering • 3rd Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">C++</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Java</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Operating Systems</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/women/81.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Saanvi Pillai</h3>
+              <p class="text-sm text-gray-600">Robotics Engineering • 4th Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">ROS</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">MATLAB</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Control Systems</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/men/84.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Vivaan Iyer</h3>
+              <p class="text-sm text-gray-600">Information Technology • 1st Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Networks</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Cyber Security</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Cloud Computing</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/women/85.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Niharika Chavan</h3>
+              <p class="text-sm text-gray-600">Electronics Engineering • 1st Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Signal Processing</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Embedded C</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Circuit Design</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/men/86.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Vivaan Thakur</h3>
+              <p class="text-sm text-gray-600">Electronics Engineering • 2nd Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Signal Processing</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Embedded C</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Circuit Design</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+
+      <div class="student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4">
+            <img src="https://randomuser.me/api/portraits/women/87.jpg" alt="Student" class="w-16 h-16 rounded-full">
+            <div>
+              <h3 class="font-semibold text-gray-900">Diya Naik</h3>
+              <p class="text-sm text-gray-600">Robotics Engineering • 1st Year</p>
+              <div class="flex flex-wrap gap-2 mt-2">
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">ROS</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">MATLAB</span>
+                <span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-sm">Control Systems</span>
+              </div>
+            </div>
+          </div>
+          <button
+            class="connect-btn px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+            Connect
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+  <footer class="bg-green-50 mt-12">
+    <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Company Info -->
+        <div>
+          <h3 class="text-lg font-semibold text-green-800 mb-4">PeerConnect</h3>
+          <p class="text-green-700">Connecting developers, building futures.</p>
+        </div>
+        <!-- Quick Links -->
+        <div>
+          <h3 class="text-lg font-semibold text-green-800 mb-4">Quick Links</h3>
+          <ul class="space-y-2">
+            <li><a href="about.html" class="text-green-700 hover:text-green-900">About Us</a></li>
+            <li><a href="#" class="text-green-700 hover:text-green-900">Contact</a></li>
+            <li><a href="#" class="text-green-700 hover:text-green-900">Privacy Policy</a></li>
+          </ul>
+        </div>
+        <!-- Connect -->
+        <div>
+          <h3 class="text-lg font-semibold text-green-800 mb-4">Connect With Us</h3>
+          <div class="flex space-x-4">
+            <a href="#" class="text-green-700 hover:text-green-900">
+              <span class="sr-only">Twitter</span>
+              <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
+              </svg>
+            </a>
+            <a href="#" class="text-green-700 hover:text-green-900">
+              <span class="sr-only">GitHub</span>
+              <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
+              </svg>
+            </a>
+            <a href="#" class="text-green-700 hover:text-green-900">
+              <span class="sr-only">Instagram</span>
+              <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.419-.419.679-.819.896-1.381.164-.422.36-1.057.413-2.227.057-1.266.07-1.646.07-4.85s-.015-3.585-.074-4.85c-.061-1.17-.256-1.805-.421-2.227-.224-.562-.479-.96-.899-1.382-.419-.419-.824-.679-1.38-.896-.42-.164-1.065-.36-2.235-.413-1.274-.057-1.649-.07-4.859-.07-3.211 0-3.586.015-4.859.074-1.171.061-1.816.256-2.236.421-.569.224-.96.479-1.379.899-.421.419-.69.824-.9 1.38-.165.42-.359 1.065-.42 2.235-.045 1.26-.061 1.649-.061 4.844 0 3.196.016 3.586.061 4.861.061 1.17.255 1.814.42 2.234.21.57.479.96.9 1.381.419.419.81.689 1.379.898.42.166 1.051.361 2.221.421 1.275.045 1.65.06 4.859.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z" />
+            </a>
+            <a href="#" class="text-green-700 hover:text-green-900">
+              <span class="sr-only">Facebook</span>
+              <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+            </a>
+            <a href="#" class="text-green-700 hover:text-green-900">
+              <span class="sr-only">LinkedIn</span>
+              <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="mt-8 pt-8 border-t border-green-200 text-center text-green-700">
+        <p>&copy; 2025 PeerConnect. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+    // Theme toggle
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const darkIcon = document.getElementById('theme-toggle-dark-icon');
+    const lightIcon = document.getElementById('theme-toggle-light-icon');
+
+    // Check local storage for theme
+    if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+      darkIcon.classList.remove('hidden');
+    } else {
+      document.documentElement.classList.remove('dark');
+      lightIcon.classList.remove('hidden');
+    }
+
+    themeToggleBtn.addEventListener('click', () => {
+      darkIcon.classList.toggle('hidden');
+      lightIcon.classList.toggle('hidden');
+
+      if (document.documentElement.classList.contains('dark')) {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+      } else {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+      }
+    });
+
+    // Search and filter functionality
+    const searchInput = document.querySelector('input[type="search"]');
+    const departmentSelect = document.querySelector('select:nth-of-type(1)');
+    const yearSelect = document.querySelector('select:nth-of-type(2)');
+    const studentCards = document.querySelectorAll('.student-card');
+
+    // Handle connect button clicks
+    const connectButtons = document.querySelectorAll('.connect-btn');
+    connectButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent card click
+            handleConnectClick(button);
+        });
+    });
+
+    // Handle card clicks for popup
+    studentCards.forEach(card => {
+        card.addEventListener('click', (e) => {
+            if (!e.target.classList.contains('connect-btn')) {
+                const studentInfo = {
+                    name: card.querySelector('h3').textContent,
+                    course: card.querySelector('p').textContent,
+                    image: card.querySelector('img').src,
+                    skills: Array.from(card.querySelectorAll('.px-2')).map(skill => skill.textContent)
+                };
+                showProfilePopup(studentInfo);
+            }
+        });
+    });
+
+    function handleConnectClick(button) {
+        if (button.textContent.trim() === 'Connect') {
+            const studentCard = button.closest('.student-card');
+            const studentName = studentCard.querySelector('h3').textContent;
+            
+            // Update button state
+            button.textContent = 'Pending';
+            button.classList.remove('bg-green-600', 'hover:bg-green-700');
+            button.classList.add('bg-yellow-600', 'hover:bg-yellow-700');
+            
+            // Show alert
+            alert(`Connection request sent to ${studentName}! They will be notified of your request.`);
+        }
+    }
+
+    function showProfilePopup(studentInfo) {
+        const popup = document.createElement('div');
+        popup.className = 'fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50';
+        popup.innerHTML = `
+            <div class="bg-white dark:bg-backgroundDark rounded-xl p-6 max-w-2xl w-full mx-4 relative animate-scaleIn">
+                <button class="absolute top-4 right-4 text-gray-500 dark:text-textDark hover:text-gray-700 dark:hover:text-peerconnectGreen-light close-popup">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+                
+                <div class="flex flex-col md:flex-row gap-6">
+                    <div class="md:w-1/3">
+                        <img src="${studentInfo.image}" alt="${studentInfo.name}" class="w-full rounded-lg shadow-md">
+                        <div class="mt-4 space-y-2">
+                            <button class="popup-connect-btn w-full py-2 bg-green-600 dark:bg-peerconnectGreen-dark text-white rounded-lg hover:bg-green-700 dark:hover:bg-peerconnectGreen-darkAccent transition">
+                                Connect
+                            </button>
+                            <button class="w-full py-2 border border-green-600 dark:border-peerconnectGreen-dark text-green-600 dark:text-peerconnectGreen-dark rounded-lg hover:bg-green-50 dark:hover:bg-peerconnectGreen-darkAccent transition">
+                                Message
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="md:w-2/3">
+                        <h2 class="text-2xl font-bold text-gray-900 dark:text-textDark mb-2">${studentInfo.name}</h2>
+                        <p class="text-gray-600 dark:text-peerconnectGreen-light mb-4">${studentInfo.course}</p>
+                        
+                        <div class="mb-6">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-textDark mb-2">Skills</h3>
+                            <div class="flex flex-wrap gap-2">
+                                ${studentInfo.skills.map(skill => 
+                                    `<span class="px-3 py-1 bg-green-100 dark:bg-peerconnectGreen-darkAccent text-green-700 dark:text-peerconnectGreen-light rounded-full">${skill}</span>`
+                                ).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Add popup connect button handler
+        const popupConnectBtn = popup.querySelector('.popup-connect-btn');
+        popupConnectBtn.addEventListener('click', () => {
+            handleConnectClick(popupConnectBtn);
+        });
+
+        // Close popup handlers
+        popup.addEventListener('click', (e) => {
+            if (e.target === popup) popup.remove();
+        });
+
+        popup.querySelector('.close-popup').addEventListener('click', () => {
+            popup.remove();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') popup.remove();
+        });
+
+        // Add animation style
+        if (!document.getElementById('popup-animation')) {
+            const style = document.createElement('style');
+            style.id = 'popup-animation';
+            style.textContent = `
+                @keyframes scaleIn {
+                    from { opacity: 0; transform: scale(0.95); }
+                    to { opacity: 1; transform: scale(1); }
+                }
+                .animate-scaleIn {
+                    animation: scaleIn 0.2s ease-out forwards;
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        document.body.appendChild(popup);
+    }
+
+    // Filter functionality
+    function filterStudents() {
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        const selectedDepartment = departmentSelect.value.toLowerCase();
+        const selectedYear = yearSelect.value;
+
+        let hasVisibleCards = false;
+
+        studentCards.forEach(card => {
+            const studentName = card.querySelector('h3').textContent.toLowerCase();
+            const courseInfo = card.querySelector('p').textContent.toLowerCase();
+            const skills = Array.from(card.querySelectorAll('.px-2'))
+                .map(skill => skill.textContent.toLowerCase());
+
+            const [department, yearInfo] = courseInfo.split('•').map(s => s.trim());
+            const year = yearInfo.includes('1st') ? '1' :
+                        yearInfo.includes('2nd') ? '2' :
+                        yearInfo.includes('3rd') ? '3' :
+                        yearInfo.includes('4th') ? '4' : '';
+
+            const matchesSearch = searchTerm === '' || 
+                                studentName.includes(searchTerm) || 
+                                skills.some(skill => skill.includes(searchTerm));
+            const matchesDepartment = selectedDepartment === '' || 
+                                    department.includes(selectedDepartment);
+            const matchesYear = selectedYear === '' || year === selectedYear;
+
+            if (matchesSearch && matchesDepartment && matchesYear) {
+                card.style.display = 'block';
+                hasVisibleCards = true;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        toggleNoResultsMessage(!hasVisibleCards);
+    }
+
+    // Initialize event listeners
+    searchInput.addEventListener('input', debounce(filterStudents, 300));
+    departmentSelect.addEventListener('change', filterStudents);
+    yearSelect.addEventListener('change', filterStudents);
+});
+
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
+}
+</script>
+</body>
+
+</html>

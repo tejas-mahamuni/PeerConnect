@@ -1,0 +1,1390 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PeerConnect</title>
+  <link href="src/output.css" rel="stylesheet" />
+  <link rel="shortcut icon" href="img/peerconnect.png" type="image/x-icon">
+  <script src="src/navbar.js" defer></script>
+</head>
+
+<body class="bg-backgroundDark text-textDark dark:bg-backgroundDark dark:text-textDark transition-colors duration-500">
+  <nav class="bg-white fixed w-full z-50 border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16 items-center">
+        <div class="flex items-center space-x-4">
+          <a href="index.html" class="flex items-center">
+            <img src="img/peerconnect.png" alt="PeerConnect Logo" class="h-10 w-auto" />
+            <span class="ml-2 font-bold text-lg text-green-600">PeerConnect</span>
+          </a>
+          <div class="hidden md:flex space-x-4 items-center">
+            <a href="index.html"
+              class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-800 hover:text-green-600 transition">Home</a>
+            <a href="dashboard.html"
+              class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-800 hover:text-green-600 transition">Dashboard</a>
+            <a href="browse.html"
+              class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-800 hover:text-green-600 transition">Browse
+              Students</a>
+            <a href="network.html"
+              class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-800 hover:text-green-600 transition">Network</a>
+            <input type="search" placeholder="Search..."
+              class="ml-6 px-3 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-peerconnectGreen-medium" />
+          </div>
+        </div>
+        <div class="hidden md:flex items-center space-x-4">
+          <a href="profile.html"
+            class="nav-link px-3 py-2 rounded-md text-sm font-medium text-gray-800 hover:text-green-600 transition">Profile</a>
+          <a href="signin.html"
+            class="nav-link px-3 py-2 rounded-md text-sm font-medium text-white bg-green-600 hover:bg-green-700 transition">Sign
+            In</a>
+        </div>
+        <div class="flex md:hidden">
+          <button id="mobile-menu-button" aria-label="Toggle menu"
+            class="text-gray-800 hover:text-peerconnectGreen-medium focus:outline-none focus:ring-2 focus:ring-peerconnectGreen-medium rounded-md">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round">
+              <path d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div id="mobile-menu" class="hidden md:hidden">
+      <a href="index.html" class="block px-4 py-2 text-gray-800 hover:bg-peerconnectGreen-light">Home</a>
+      <a href="dashboard.html" class="block px-4 py-2 text-gray-800 hover:bg-peerconnectGreen-light">Dashboard</a>
+      <a href="browse.html" class="block px-4 py-2 text-gray-800 hover:bg-peerconnectGreen-light">Browse Students</a>
+      <a href="network.html" class="block px-4 py-2 text-gray-800 hover:bg-peerconnectGreen-light">Network</a>
+      <a href="profile.html" class="block px-4 py-2 text-gray-800 hover:bg-peerconnectGreen-light">Profile</a>
+      <a href="signin.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium text-white bg-green-600 hover:bg-green-700 transition">Sign In</a>
+    </div>
+  </nav>
+
+  <main class="pt-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+    <section id="hero"
+      class="relative rounded-lg p-6 sm:p-12 md:p-20 flex flex-col items-center justify-center text-center overflow-hidden bg-white"
+      style="width: 100%; height: auto; min-height: 300px;">
+      <!-- Stars animation background -->
+      <canvas id="stars-canvas" class="absolute inset-0 w-full h-full z-0"></canvas>
+      <canvas id="triangle-pattern-canvas" class="absolute inset-0 w-full h-full z-0"></canvas>
+      <h1
+        class="relative text-5xl font-extrabold mb-6 animate-fadeInDown text-gray-900 block sm:block md:block lg:block xl:block"
+        style="display: block !important; z-index: 10;">Welcome to PeerConnect</h1>
+      <p class="relative text-xl max-w-3xl mb-8 animate-fadeInUp text-gray-700" style="z-index: 10;">Connect with
+        students who share your interests and collaborate on exciting projects.</p>
+      <div class="relative w-35 mx-auto mb-6" style="top: 10px; position: relative; z-index: 10;">
+        <button id="get-started"
+          class="w-full bg-blue-600 text-white px-6 py-2 rounded-full text-base font-semibold hover:bg-blue-700 transition shadow-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 duration-300"><a href="signin.html">Get Started</a></button>
+      </div>
+    </section>
+
+    <script>
+      const triangleCanvas = document.getElementById('triangle-pattern-canvas');
+      const tCtx = triangleCanvas.getContext('2d');
+
+      function resizeTriangleCanvas() {
+        triangleCanvas.width = triangleCanvas.clientWidth;
+        triangleCanvas.height = triangleCanvas.clientHeight;
+      }
+
+      let triangles = [];
+      const size = 50;
+      const height = size * Math.sqrt(3) / 2;
+
+      function createTriangles() {
+        triangles = [];
+        for (let y = 0; y < triangleCanvas.height + height; y += height) {
+          for (let x = 0; x < triangleCanvas.width + size; x += size) {
+            const xOffset = (Math.floor(y / height) % 2) * (size / 2);
+            triangles.push({
+              x: x + xOffset,
+              y: y,
+              direction: 'up',
+              alpha: Math.random() * 0.3 + 0.1,
+              alphaChange: (Math.random() * 0.005 + 0.002) * (Math.random() > 0.5 ? 1 : -1),
+            });
+            triangles.push({
+              x: x + xOffset,
+              y: y,
+              direction: 'down',
+              alpha: Math.random() * 0.3 + 0.1,
+              alphaChange: (Math.random() * 0.005 + 0.002) * (Math.random() > 0.5 ? 1 : -1),
+            });
+          }
+        }
+      }
+
+      function drawTriangle(triangle) {
+        tCtx.beginPath();
+        if (triangle.direction === 'up') {
+          tCtx.moveTo(triangle.x, triangle.y);
+          tCtx.lineTo(triangle.x + size / 2, triangle.y - height);
+          tCtx.lineTo(triangle.x + size, triangle.y);
+        } else {
+          tCtx.moveTo(triangle.x, triangle.y);
+          tCtx.lineTo(triangle.x + size / 2, triangle.y + height);
+          tCtx.lineTo(triangle.x + size, triangle.y);
+        }
+        tCtx.closePath();
+        tCtx.strokeStyle = `rgba(34, 197, 94, ${triangle.alpha})`;
+        tCtx.lineWidth = 1.5;
+        tCtx.stroke();
+      }
+
+      function animateTriangles() {
+        tCtx.clearRect(0, 0, triangleCanvas.width, triangleCanvas.height);
+        triangles.forEach(triangle => {
+          drawTriangle(triangle);
+          triangle.alpha += triangle.alphaChange;
+          if (triangle.alpha <= 0.1 || triangle.alpha >= 0.4) {
+            triangle.alphaChange = -triangle.alphaChange;
+          }
+        });
+        requestAnimationFrame(animateTriangles);
+      }
+
+      function initTrianglePattern() {
+        resizeTriangleCanvas();
+        createTriangles();
+        animateTriangles();
+      }
+
+      window.addEventListener('resize', () => {
+        resizeTriangleCanvas();
+        createTriangles();
+      });
+
+      initTrianglePattern();
+    </script>
+
+    <script>
+      const canvas = document.getElementById('stars-canvas');
+      const ctx = canvas.getContext('2d');
+      let stars = [];
+      const numStars = 100;
+
+      function resizeCanvas() {
+        canvas.width = canvas.clientWidth;
+        canvas.height = canvas.clientHeight;
+      }
+
+      function createStars() {
+        stars = [];
+        for (let i = 0; i < numStars; i++) {
+          stars.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            radius: Math.random() * 1.5 + 0.5,
+            alpha: Math.random(),
+            alphaChange: 0.01 + Math.random() * 0.02,
+          });
+        }
+      }
+
+      function drawStars() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        stars.forEach(star => {
+          ctx.beginPath();
+          ctx.arc(star.x, star.y, star.radius, 0, 2 * Math.PI);
+          ctx.fillStyle = `rgba(34, 197, 94, ${star.alpha})`; // green color with alpha
+          ctx.fill();
+          star.alpha += star.alphaChange;
+          if (star.alpha <= 0 || star.alpha >= 1) {
+            star.alphaChange = -star.alphaChange;
+          }
+        });
+        requestAnimationFrame(drawStars);
+      }
+
+      function init() {
+        resizeCanvas();
+        createStars();
+        drawStars();
+      }
+
+      window.addEventListener('resize', () => {
+        resizeCanvas();
+        createStars();
+      });
+
+      init();
+    </script>
+    <!-- Add after the profiles section and before footer -->
+    <section id="datathons" class="space-y-6 mt-12 bg-white rounded-lg p-8 shadow-lg">
+      <h2 class="text-3xl font-bold text-gray-900">Upcoming Datathons</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Datathon Card 1 -->
+        <div
+          class="bg-gradient-to-br from-green-50 to-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+          <div class="flex items-center justify-between mb-4">
+            <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">May 30, 2025</span>
+            <span class="text-green-600 font-medium">Virtual</span>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">AI Healthcare Innovation Challenge</h3>
+          <p class="text-gray-600 mb-4">Build AI solutions to solve real-world healthcare challenges. Open to all skill
+            levels.</p>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-500">48 Hours</span>
+            <button
+              class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">Register
+              Now</button>
+          </div>
+        </div>
+
+        <!-- Datathon Card 2 -->
+        <div
+          class="bg-gradient-to-br from-green-50 to-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+          <div class="flex items-center justify-between mb-4">
+            <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">June 15, 2025</span>
+            <span class="text-green-600 font-medium">Hybrid</span>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">Climate Tech Data Challenge</h3>
+          <p class="text-gray-600 mb-4">Analyze environmental data to propose sustainable solutions for climate change.
+          </p>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-500">72 Hours</span>
+            <button
+              class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">Register
+              Now</button>
+          </div>
+        </div>
+
+        <!-- Datathon Card 3 -->
+        <div
+          class="bg-gradient-to-br from-green-50 to-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+          <div class="flex items-center justify-between mb-4">
+            <span class="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">July 1, 2025</span>
+            <span class="text-green-600 font-medium">In-Person</span>
+          </div>
+          <h3 class="text-xl font-semibold text-gray-900 mb-2">FinTech Data Sprint</h3>
+          <p class="text-gray-600 mb-4">Explore financial datasets and develop innovative solutions for modern banking.
+          </p>
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-500">36 Hours</span>
+            <button
+              class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">Register
+              Now</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-8">
+        <a href="#" class="inline-flex items-center text-green-600 hover:text-green-700 font-medium">
+          View All Datathons
+          <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </a>
+      </div>
+    </section>
+    <section id="social-feed" class="space-y-6 mt-12">
+      <h2 class="text-3xl font-bold text-gray-900">Posts</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Post 1 -->
+        <div class="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+          <div class="flex items-start space-x-4">
+            <img src="https://i.pravatar.cc/40?" alt="Student avatar" class="w-10 h-10 rounded-full">
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold text-gray-900">Sarah Chen</h3>
+                <span class="text-sm text-gray-500">2 hours ago</span>
+              </div>
+              <p class="text-sm text-gray-600 mt-1">Computer Science @ MIT</p>
+            </div>
+          </div>
+          <p class="mt-4 text-gray-700">Just completed my summer internship at Google! Amazing experience working with
+            the AI team. #SoftwareEngineering #AI</p>
+          <img src="img/11.png" alt="Internship celebration"
+            class="mt-4 rounded-lg w-full object-cover h-64">
+          <div class="flex items-center justify-between mt-4">
+            <div class="flex space-x-4">
+              <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5">
+                  </path>
+                </svg>
+                <span>245</span>
+              </button>
+              <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
+                  </path>
+                </svg>
+                <span>18</span>
+              </button>
+            </div>
+            <button class="text-green-600 hover:text-green-700 text-sm font-medium">Share</button>
+          </div>
+        </div>
+        <div class="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+          <div class="flex items-start space-x-4">
+            <img src="https://i.pravatar.cc/40?img=10" alt="Student avatar" class="w-10 h-10 rounded-full">
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold text-gray-900">Aarav Mehta</h3>
+                <span class="text-sm text-gray-500">2 hours ago</span>
+              </div>
+              <p class="text-sm text-gray-600 mt-1">Computer Science @ MIT</p>
+            </div>
+          </div>
+          <p class="mt-4 text-gray-700">Completed my Data Structures project with real-time visualization in Python!
+            #DSA #Python</p>
+          <img src="img/10.png" alt="Post image"
+            class="mt-4 rounded-lg w-full object-cover h-64">
+          <div class="flex items-center justify-between mt-4">
+            <div class="flex space-x-4">
+              <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5">
+                  </path>
+                </svg>
+                <span>100</span>
+              </button>
+              <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
+                  </path>
+                </svg>
+                <span>10</span>
+              </button>
+            </div>
+            <button class="text-green-600 hover:text-green-700 text-sm font-medium">Share</button>
+          </div>
+        </div>
+
+        <!-- Post 2 -->
+        <div class="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+          <div class="flex items-start space-x-4">
+            <img src="https://i.pravatar.cc/40?img=11" alt="Student avatar" class="w-10 h-10 rounded-full">
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold text-gray-900">Diya Nair</h3>
+                <span class="text-sm text-gray-500">5 hours ago</span>
+              </div>
+              <p class="text-sm text-gray-600 mt-1">Information Technology @ MIT</p>
+            </div>
+          </div>
+          <p class="mt-4 text-gray-700">Presented my final year project on IoT-based home automation. It was a hit! #IoT
+            #SmartHome</p>
+          <img src="img/9.png" alt="Post image"
+            class="mt-4 rounded-lg w-full object-cover h-64">
+          <div class="flex items-center justify-between mt-4">
+            <div class="flex space-x-4">
+              <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5">
+                  </path>
+                </svg>
+                <span>107</span>
+              </button>
+              <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
+                  </path>
+                </svg>
+                <span>13</span>
+              </button>
+            </div>
+            <button class="text-green-600 hover:text-green-700 text-sm font-medium">Share</button>
+          </div>
+        </div>
+
+        <!-- Post 3 -->
+        <div class="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+          <div class="flex items-start space-x-4">
+            <img src="https://i.pravatar.cc/40?img=12" alt="Student avatar" class="w-10 h-10 rounded-full">
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold text-gray-900">Karan Joshi</h3>
+                <span class="text-sm text-gray-500">1 day ago</span>
+              </div>
+              <p class="text-sm text-gray-600 mt-1">Mechanical Engineering @ MIT</p>
+            </div>
+          </div>
+          <p class="mt-4 text-gray-700">Just returned from a week-long robotics bootcamp. Learned so much! 🤖 #Robotics
+            #MITLife</p>
+          <img src="img/8.png" alt="Post image"
+            class="mt-4 rounded-lg w-full object-cover h-64">
+          <div class="flex items-center justify-between mt-4">
+            <div class="flex space-x-4">
+              <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5">
+                  </path>
+                </svg>
+                <span>114</span>
+              </button>
+              <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
+                  </path>
+                </svg>
+                <span>16</span>
+              </button>
+            </div>
+            <button class="text-green-600 hover:text-green-700 text-sm font-medium">Share</button>
+          </div>
+        </div>
+
+        <!-- Post 4 -->
+        <div class="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+          <div class="flex items-start space-x-4">
+            <img src="https://i.pravatar.cc/40?img=13" alt="Student avatar" class="w-10 h-10 rounded-full">
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold text-gray-900">Sneha Kulkarni</h3>
+                <span class="text-sm text-gray-500">3 hours ago</span>
+              </div>
+              <p class="text-sm text-gray-600 mt-1">Electronics & Telecommunication @ MIT</p>
+            </div>
+          </div>
+          <p class="mt-4 text-gray-700">Built a web-based voting system with Flask and MySQL. Proud moment! #WebDev
+            #Flask</p>
+          <img src="img/7.png" alt="Post image"
+            class="mt-4 rounded-lg w-full object-cover h-64">
+          <div class="flex items-center justify-between mt-4">
+            <div class="flex space-x-4">
+              <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5">
+                  </path>
+                </svg>
+                <span>121</span>
+              </button>
+              <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
+                  </path>
+                </svg>
+                <span>19</span>
+              </button>
+            </div>
+            <button class="text-green-600 hover:text-green-700 text-sm font-medium">Share</button>
+          </div>
+        </div>
+
+        <!-- Post 5 -->
+        <div class="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+          <div class="flex items-start space-x-4">
+            <img src="https://i.pravatar.cc/40?img=14" alt="Student avatar" class="w-10 h-10 rounded-full">
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold text-gray-900">Ritik Singh</h3>
+                <span class="text-sm text-gray-500">6 hours ago</span>
+              </div>
+              <p class="text-sm text-gray-600 mt-1">Civil Engineering @ MIT</p>
+            </div>
+          </div>
+          <p class="mt-4 text-gray-700">Certified in AWS Solutions Architect - Associate! Cloud here I come. ☁️ #AWS
+            #Certification</p>
+          <img src="img/6.png" alt="Post image"
+            class="mt-4 rounded-lg w-full object-cover h-64">
+          <div class="flex items-center justify-between mt-4">
+            <div class="flex space-x-4">
+              <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5">
+                  </path>
+                </svg>
+                <span>128</span>
+              </button>
+              <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
+                  </path>
+                </svg>
+                <span>22</span>
+              </button>
+            </div>
+            <button class="text-green-600 hover:text-green-700 text-sm font-medium">Share</button>
+          </div>
+        </div>
+
+        <!-- Post 6 -->
+        <div class="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+          <div class="flex items-start space-x-4">
+            <img src="https://i.pravatar.cc/40?img=15" alt="Student avatar" class="w-10 h-10 rounded-full">
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold text-gray-900">Anjali Reddy</h3>
+                <span class="text-sm text-gray-500">8 hours ago</span>
+              </div>
+              <p class="text-sm text-gray-600 mt-1">Computer Science @ MIT</p>
+            </div>
+          </div>
+          <p class="mt-4 text-gray-700">Built an Android app for campus navigation using Kotlin. #AndroidDev
+            #MITProjects</p>
+          <img src="img/5.png" alt="Post image"
+            class="mt-4 rounded-lg w-full object-cover h-64">
+          <div class="flex items-center justify-between mt-4">
+            <div class="flex space-x-4">
+              <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5">
+                  </path>
+                </svg>
+                <span>135</span>
+              </button>
+              <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
+                  </path>
+                </svg>
+                <span>25</span>
+              </button>
+            </div>
+            <button class="text-green-600 hover:text-green-700 text-sm font-medium">Share</button>
+          </div>
+        </div>
+
+        <!-- Post 7 -->
+        <div class="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+          <div class="flex items-start space-x-4">
+            <img src="https://i.pravatar.cc/40?img=16" alt="Student avatar" class="w-10 h-10 rounded-full">
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold text-gray-900">Vedant Chauhan</h3>
+                <span class="text-sm text-gray-500">4 hours ago</span>
+              </div>
+              <p class="text-sm text-gray-600 mt-1">Information Technology @ MIT</p>
+            </div>
+          </div>
+          <p class="mt-4 text-gray-700">Started working on a capstone project focused on ML-based plant disease
+            detection. 🌱 #MachineLearning</p>
+          <img src="img/4.png" alt="Post image"
+            class="mt-4 rounded-lg w-full object-cover h-64">
+          <div class="flex items-center justify-between mt-4">
+            <div class="flex space-x-4">
+              <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5">
+                  </path>
+                </svg>
+                <span>142</span>
+              </button>
+              <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
+                  </path>
+                </svg>
+                <span>28</span>
+              </button>
+            </div>
+            <button class="text-green-600 hover:text-green-700 text-sm font-medium">Share</button>
+          </div>
+        </div>
+
+        <!-- Post 8 -->
+        <div class="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+          <div class="flex items-start space-x-4">
+            <img src="https://i.pravatar.cc/40?img=17" alt="Student avatar" class="w-10 h-10 rounded-full">
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold text-gray-900">Isha Shah</h3>
+                <span class="text-sm text-gray-500">7 hours ago</span>
+              </div>
+              <p class="text-sm text-gray-600 mt-1">Mechanical Engineering @ MIT</p>
+            </div>
+          </div>
+          <p class="mt-4 text-gray-700">Got selected for Google DSC MIT core team! Ready for a great year. 🎉
+            #DeveloperStudentClubs</p>
+          <img src="img/3.png" alt="Post image"
+            class="mt-4 rounded-lg w-full object-cover h-64">
+          <div class="flex items-center justify-between mt-4">
+            <div class="flex space-x-4">
+              <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5">
+                  </path>
+                </svg>
+                <span>149</span>
+              </button>
+              <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
+                  </path>
+                </svg>
+                <span>31</span>
+              </button>
+            </div>
+            <button class="text-green-600 hover:text-green-700 text-sm font-medium">Share</button>
+          </div>
+        </div>
+
+        <!-- Post 9 -->
+        <div class="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+          <div class="flex items-start space-x-4">
+            <img src="https://i.pravatar.cc/40?img=18" alt="Student avatar" class="w-10 h-10 rounded-full">
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold text-gray-900">Nikhil Yadav</h3>
+                <span class="text-sm text-gray-500">9 hours ago</span>
+              </div>
+              <p class="text-sm text-gray-600 mt-1">Electronics & Telecommunication @ MIT</p>
+            </div>
+          </div>
+          <p class="mt-4 text-gray-700">Completed UI/UX course from Coursera. Designing feels so intuitive now! #UIUX
+            #Coursera</p>
+          <img src="img/2.png" alt="Post image"
+            class="mt-4 rounded-lg w-full object-cover h-64">
+          <div class="flex items-center justify-between mt-4">
+            <div class="flex space-x-4">
+              <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5">
+                  </path>
+                </svg>
+                <span>156</span>
+              </button>
+              <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
+                  </path>
+                </svg>
+                <span>34</span>
+              </button>
+            </div>
+            <button class="text-green-600 hover:text-green-700 text-sm font-medium">Share</button>
+          </div>
+        </div>
+
+        <!-- Post 10 -->
+        <div class="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+          <div class="flex items-start space-x-4">
+            <img src="https://i.pravatar.cc/40?img=19" alt="Student avatar" class="w-10 h-10 rounded-full">
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold text-gray-900">Meera Bansal</h3>
+                <span class="text-sm text-gray-500">30 minutes ago</span>
+              </div>
+              <p class="text-sm text-gray-600 mt-1">Civil Engineering @ MIT</p>
+            </div>
+          </div>
+          <p class="mt-4 text-gray-700">Participated in a 24-hour hackathon and built a voice-based reminder app. 🔥
+            #Hackathon #VoiceTech</p>
+          <img src="img/1.png" alt="Post image"
+            class="mt-4 rounded-lg w-full object-cover h-64">
+          <div class="flex items-center justify-between mt-4">
+            <div class="flex space-x-4">
+              <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5">
+                  </path>
+                </svg>
+                <span>163</span>
+              </button>
+              <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
+                  </path>
+                </svg>
+                <span>37</span>
+              </button>
+            </div>
+            <button class="text-green-600 hover:text-green-700 text-sm font-medium">Share</button>
+          </div>
+        </div>
+
+        <!-- Post 11 -->
+        <div class="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+          <div class="flex items-start space-x-4">
+            <img src="https://i.pravatar.cc/40?img=20" alt="Student avatar" class="w-10 h-10 rounded-full">
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold text-gray-900">Rajiv Deshmukh</h3>
+                <span class="text-sm text-gray-500">2 hours ago</span>
+              </div>
+              <p class="text-sm text-gray-600 mt-1">Computer Science @ MIT</p>
+            </div>
+          </div>
+          <p class="mt-4 text-gray-700">Completed my Data Structures project with real-time visualization in Python!
+            #DSA #Python</p>
+          <img src="img/11.png" alt="Post image"
+            class="mt-4 rounded-lg w-full object-cover h-64">
+          <div class="flex items-center justify-between mt-4">
+            <div class="flex space-x-4">
+              <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5">
+                  </path>
+                </svg>
+                <span>170</span>
+              </button>
+              <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
+                  </path>
+                </svg>
+                <span>40</span>
+              </button>
+            </div>
+            <button class="text-green-600 hover:text-green-700 text-sm font-medium">Share</button>
+          </div>
+        </div>
+
+        <!-- Post 12 -->
+        <div class="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+          <div class="flex items-start space-x-4">
+            <img src="https://i.pravatar.cc/40?img=21" alt="Student avatar" class="w-10 h-10 rounded-full">
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold text-gray-900">Pooja Iyer</h3>
+                <span class="text-sm text-gray-500">5 hours ago</span>
+              </div>
+              <p class="text-sm text-gray-600 mt-1">Information Technology @ MIT</p>
+            </div>
+          </div>
+          <p class="mt-4 text-gray-700">Presented my final year project on IoT-based home automation. It was a hit! #IoT
+            #SmartHome</p>
+          <img src="img/10.png" alt="Post image"
+            class="mt-4 rounded-lg w-full object-cover h-64">
+          <div class="flex items-center justify-between mt-4">
+            <div class="flex space-x-4">
+              <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5">
+                  </path>
+                </svg>
+                <span>177</span>
+              </button>
+              <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
+                  </path>
+                </svg>
+                <span>43</span>
+              </button>
+            </div>
+            <button class="text-green-600 hover:text-green-700 text-sm font-medium">Share</button>
+          </div>
+        </div>
+
+        <!-- Post 13 -->
+        <div class="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+          <div class="flex items-start space-x-4">
+            <img src="https://i.pravatar.cc/40?img=22" alt="Student avatar" class="w-10 h-10 rounded-full">
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold text-gray-900">Siddharth Rane</h3>
+                <span class="text-sm text-gray-500">1 day ago</span>
+              </div>
+              <p class="text-sm text-gray-600 mt-1">Mechanical Engineering @ MIT</p>
+            </div>
+          </div>
+          <p class="mt-4 text-gray-700">Just returned from a week-long robotics bootcamp. Learned so much! 🤖 #Robotics
+            #MITLife</p>
+          <img src="img/9.png" alt="Post image"
+            class="mt-4 rounded-lg w-full object-cover h-64">
+          <div class="flex items-center justify-between mt-4">
+            <div class="flex space-x-4">
+              <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5">
+                  </path>
+                </svg>
+                <span>184</span>
+              </button>
+              <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
+                  </path>
+                </svg>
+                <span>46</span>
+              </button>
+            </div>
+            <button class="text-green-600 hover:text-green-700 text-sm font-medium">Share</button>
+          </div>
+        </div>
+
+        <!-- Post 14 -->
+        <div class="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+          <div class="flex items-start space-x-4">
+            <img src="https://i.pravatar.cc/40?img=23" alt="Student avatar" class="w-10 h-10 rounded-full">
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold text-gray-900">Tanya Verma</h3>
+                <span class="text-sm text-gray-500">3 hours ago</span>
+              </div>
+              <p class="text-sm text-gray-600 mt-1">Electronics & Telecommunication @ MIT</p>
+            </div>
+          </div>
+          <p class="mt-4 text-gray-700">Built a web-based voting system with Flask and MySQL. Proud moment! #WebDev
+            #Flask</p>
+          <img src="img/cisco_logo.jpeg" alt="Post image"
+            class="mt-4 rounded-lg w-full object-cover h-64">
+          <div class="flex items-center justify-between mt-4">
+            <div class="flex space-x-4">
+              <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5">
+                  </path>
+                </svg>
+                <span>191</span>
+              </button>
+              <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
+                  </path>
+                </svg>
+                <span>49</span>
+              </button>
+            </div>
+            <button class="text-green-600 hover:text-green-700 text-sm font-medium">Share</button>
+          </div>
+        </div>
+
+        <!-- Post 15 -->
+        <div class="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+          <div class="flex items-start space-x-4">
+            <img src="https://i.pravatar.cc/40?img=24" alt="Student avatar" class="w-10 h-10 rounded-full">
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold text-gray-900">Amit Kaur</h3>
+                <span class="text-sm text-gray-500">6 hours ago</span>
+              </div>
+              <p class="text-sm text-gray-600 mt-1">Civil Engineering @ MIT</p>
+            </div>
+          </div>
+          <p class="mt-4 text-gray-700">Certified in AWS Solutions Architect - Associate! Cloud here I come. ☁️ #AWS
+            #Certification</p>
+          <img src="img/9.png" alt="Post image"
+            class="mt-4 rounded-lg w-full object-cover h-64">
+          <div class="flex items-center justify-between mt-4">
+            <div class="flex space-x-4">
+              <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5">
+                  </path>
+                </svg>
+                <span>198</span>
+              </button>
+              <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
+                  </path>
+                </svg>
+                <span>12</span>
+              </button>
+            </div>
+            <button class="text-green-600 hover:text-green-700 text-sm font-medium">Share</button>
+          </div>
+        </div>
+
+        <!-- Post 16 -->
+        <div class="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+          <div class="flex items-start space-x-4">
+            <img src="https://i.pravatar.cc/40?img=25" alt="Student avatar" class="w-10 h-10 rounded-full">
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold text-gray-900">Neha D'Souza</h3>
+                <span class="text-sm text-gray-500">8 hours ago</span>
+              </div>
+              <p class="text-sm text-gray-600 mt-1">Computer Science @ MIT</p>
+            </div>
+          </div>
+          <p class="mt-4 text-gray-700">Built an Android app for campus navigation using Kotlin. #AndroidDev
+            #MITProjects</p>
+          <img src="img/6.png" alt="Post image"
+            class="mt-4 rounded-lg w-full object-cover h-64">
+          <div class="flex items-center justify-between mt-4">
+            <div class="flex space-x-4">
+              <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5">
+                  </path>
+                </svg>
+                <span>205</span>
+              </button>
+              <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
+                  </path>
+                </svg>
+                <span>15</span>
+              </button>
+            </div>
+            <button class="text-green-600 hover:text-green-700 text-sm font-medium">Share</button>
+          </div>
+        </div>
+
+        <!-- Post 17 -->
+        <div class="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+          <div class="flex items-start space-x-4">
+            <img src="https://i.pravatar.cc/40?img=26" alt="Student avatar" class="w-10 h-10 rounded-full">
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold text-gray-900">Saurabh Patil</h3>
+                <span class="text-sm text-gray-500">4 hours ago</span>
+              </div>
+              <p class="text-sm text-gray-600 mt-1">Information Technology @ MIT</p>
+            </div>
+          </div>
+          <p class="mt-4 text-gray-700">Started working on a capstone project focused on ML-based plant disease
+            detection. 🌱 #MachineLearning</p>
+          <img src="img/7.png" alt="Post image"
+            class="mt-4 rounded-lg w-full object-cover h-64">
+          <div class="flex items-center justify-between mt-4">
+            <div class="flex space-x-4">
+              <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5">
+                  </path>
+                </svg>
+                <span>219</span>
+              </button>
+              <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
+                  </path>
+                </svg>
+                <span>18</span>
+              </button>
+            </div>
+            <button class="text-green-600 hover:text-green-700 text-sm font-medium">Share</button>
+          </div>
+        </div>
+
+        <!-- Post 18 -->
+        <div class="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+          <div class="flex items-start space-x-4">
+            <img src="https://i.pravatar.cc/40?img=27" alt="Student avatar" class="w-10 h-10 rounded-full">
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold text-gray-900">Krupa Gandhi</h3>
+                <span class="text-sm text-gray-500">7 hours ago</span>
+              </div>
+              <p class="text-sm text-gray-600 mt-1">Mechanical Engineering @ MIT</p>
+            </div>
+          </div>
+          <p class="mt-4 text-gray-700">Got selected for Google DSC MIT core team! Ready for a great year. 🎉
+            #DeveloperStudentClubs</p>
+          <img src="img/2.png" alt="Post image"
+            class="mt-4 rounded-lg w-full object-cover h-64">
+          <div class="flex items-center justify-between mt-4">
+            <div class="flex space-x-4">
+              <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5">
+                  </path>
+                </svg>
+                <span>226</span>
+              </button>
+              <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
+                  </path>
+                </svg>
+                <span>21</span>
+              </button>
+            </div>
+            <button class="text-green-600 hover:text-green-700 text-sm font-medium">Share</button>
+          </div>
+        </div>
+
+        <!-- Post 19 -->
+        <div class="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+          <div class="flex items-start space-x-4">
+            <img src="https://i.pravatar.cc/40?img=28" alt="Student avatar" class="w-10 h-10 rounded-full">
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold text-gray-900">Yash Rawat</h3>
+                <span class="text-sm text-gray-500">9 hours ago</span>
+              </div>
+              <p class="text-sm text-gray-600 mt-1">Electronics & Telecommunication @ MIT</p>
+            </div>
+          </div>
+          <p class="mt-4 text-gray-700">Completed UI/UX course from Coursera. Designing feels so intuitive now! #UIUX
+            #Coursera</p>
+          <img src="img/1.png" alt="Post image"
+            class="mt-4 rounded-lg w-full object-cover h-64">
+          <div class="flex items-center justify-between mt-4">
+            <div class="flex space-x-4">
+              <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5">
+                  </path>
+                </svg>
+                <span>233</span>
+              </button>
+              <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
+                  </path>
+                </svg>
+                <span>27</span>
+              </button>
+            </div>
+            <button class="text-green-600 hover:text-green-700 text-sm font-medium">Share</button>
+          </div>
+        </div>
+
+        <!-- Post 20 -->
+        <div class="bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300">
+          <div class="flex items-start space-x-4">
+            <img src="https://i.pravatar.cc/40?img=29" alt="Student avatar" class="w-10 h-10 rounded-full">
+            <div class="flex-1">
+              <div class="flex items-center justify-between">
+                <h3 class="font-semibold text-gray-900">Tanisha Das</h3>
+                <span class="text-sm text-gray-500">30 minutes ago</span>
+              </div>
+              <p class="text-sm text-gray-600 mt-1">Civil Engineering @ MIT</p>
+            </div>
+          </div>
+          <p class="mt-4 text-gray-700">Participated in a 24-hour hackathon and built a voice-based reminder app. 🔥
+            #Hackathon #VoiceTech</p>
+          <img src="img/mit.jpeg" alt="Post image"
+            class="mt-4 rounded-lg w-full object-cover h-64">
+          <div class="flex items-center justify-between mt-4">
+            <div class="flex space-x-4">
+              <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5">
+                  </path>
+                </svg>
+                <span>246</span>
+              </button>
+              <button class="flex items-center space-x-2 text-gray-600 hover:text-green-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
+                  </path>
+                </svg>
+                <span>27</span>
+              </button>
+            </div>
+            <button class="text-green-600 hover:text-green-700 text-sm font-medium">Share</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Load More Button -->
+      <div class="text-center mt-8">
+        <button class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-300">
+          Load More Posts
+        </button>
+      </div>
+    </section>
+    <section id="profiles" class="space-y-6 mt-12">
+      <h2 class="text-3xl font-bold">Suggested Students</h2>
+      <div id="students-list" class="grid grid-cols-1 sm:grid-cols-1 gap-6">
+      </div>
+    </section>
+
+
+  </main>
+
+  <!-- <script src="src/home.js" defer></script> -->
+  <style>
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fadeInUp {
+      animation: fadeInUp 0.5s ease forwards;
+    }
+  </style>
+
+  <footer class="bg-green-50 mt-12">
+    <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Company Info -->
+        <div>
+          <h3 class="text-lg font-semibold text-green-800 mb-4">PeerConnect</h3>
+          <p class="text-green-700">Connecting developers, building futures.</p>
+        </div>
+        <!-- Quick Links -->
+        <div>
+          <h3 class="text-lg font-semibold text-green-800 mb-4">Quick Links</h3>
+          <ul class="space-y-2">
+            <li><a href="about.html" class="text-green-700 hover:text-green-900">About Us</a></li>
+            <li><a href="#" class="text-green-700 hover:text-green-900">Contact</a></li>
+            <li><a href="#" class="text-green-700 hover:text-green-900">Privacy Policy</a></li>
+          </ul>
+        </div>
+        <!-- Connect -->
+        <div>
+          <h3 class="text-lg font-semibold text-green-800 mb-4">Connect With Us</h3>
+          <div class="flex space-x-4">
+            <a href="#" class="text-green-700 hover:text-green-900">
+              <span class="sr-only">Twitter</span>
+              <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
+            </a>
+            <a href="#" class="text-green-700 hover:text-green-900">
+              <span class="sr-only">GitHub</span>
+              <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
+              </svg>
+            </a>
+            <a href="#" class="text-green-700 hover:text-green-900">
+              <span class="sr-only">Instagram</span>
+              <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.057-1.266.07-1.646.07-4.85s-.015-3.585-.074-4.85c-.061-1.17-.256-1.805-.421-2.227-.224-.562-.479-.96-.899-1.382-.419-.419-.824-.679-1.38-.896-.42-.164-1.065-.36-2.235-.413-1.274-.057-1.649-.07-4.859-.07-3.211 0-3.586.015-4.859.074-1.171.061-1.816.256-2.236.421-.569.224-.96.479-1.379.899-.421.419-.69.824-.9 1.38-.165.42-.359 1.065-.42 2.235-.045 1.26-.061 1.646-.061 4.844 0 3.196.016 3.586.061 4.861.061 1.17.255 1.814.42 2.234.21.57.479.96.9 1.381.419.419.81.689 1.379.898.42.166 1.051.361 2.221.421 1.275.045 1.65.06 4.859.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z" />
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="mt-8 pt-8 border-t border-green-200 text-center text-green-700">
+        <p>&copy; 2025 PeerConnect. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+  <!-- Add this before the footer -->
+  <script>
+    // Student data array with more profiles
+    const students = [
+      {
+        name: 'Arjun Patel',
+        image: 'https://i.pravatar.cc/150?img=11',
+        course: 'Computer Science',
+        college: 'IIT Bombay',
+        skills: ['Python', 'Machine Learning', 'Data Science'],
+        about: 'Passionate about AI and machine learning. Currently working on computer vision projects.',
+        projects: ['AI Image Recognition', 'Smart Home Automation'],
+        connectionStatus: 'Connect'
+      },
+      {
+        name: 'Priya Sharma',
+        image: 'https://i.pravatar.cc/150?img=25',
+        course: 'Information Technology',
+        college: 'BITS Pilani',
+        skills: ['Full Stack Development', 'React', 'Node.js'],
+        about: 'Full stack developer with interest in cloud computing and serverless architecture.',
+        projects: ['E-learning Platform', 'Task Management App'],
+        connectionStatus: 'Connect'
+      },
+      {
+        name: 'Karthik Iyer',
+        image: 'https://i.pravatar.cc/150?img=12',
+        course: 'Electronics Engineering',
+        college: 'MIT Pune',
+        skills: ['IoT', 'Embedded Systems', 'Arduino'],
+        about: 'IoT enthusiast working on smart city solutions.',
+        projects: ['Smart Traffic System', 'Environmental Monitoring'],
+        connectionStatus: 'Connect'
+      },
+      {
+        name: 'Riya Desai',
+        image: 'https://i.pravatar.cc/150?img=26',
+        course: 'Data Science',
+        college: 'IIT Delhi',
+        skills: ['Data Analysis', 'Deep Learning', 'TensorFlow'],
+        about: 'Data scientist focusing on deep learning applications in healthcare.',
+        projects: ['Disease Prediction Model', 'Medical Image Analysis'],
+        connectionStatus: 'Connect'
+      },
+      {
+        name: 'Aditya Kumar',
+        image: 'https://i.pravatar.cc/150?img=13',
+        course: 'Mechanical Engineering',
+        college: 'IIT Madras',
+        skills: ['CAD Design', 'Robotics', 'Arduino'],
+        about: 'Robotics enthusiast working on autonomous systems.',
+        projects: ['Autonomous Drone', 'Smart Manufacturing System'],
+        connectionStatus: 'Connect'
+      },
+      {
+        name: 'Neha Gupta',
+        image: 'https://i.pravatar.cc/150?img=27',
+        course: 'Computer Engineering',
+        college: 'BITS Goa',
+        skills: ['Web Development', 'UI/UX', 'JavaScript'],
+        about: 'Frontend developer passionate about creating intuitive user experiences.',
+        projects: ['E-commerce Platform', 'Portfolio Generator'],
+        connectionStatus: 'Connect'
+      }
+    ];
+
+    // Function to create student cards
+    function createStudentCard(student) {
+      const card = document.createElement('div');
+      card.className = 'student-card bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300';
+      card.innerHTML = `
+        <div class="flex items-center space-x-4">
+          <img src="${student.image}" alt="${student.name}" class="w-16 h-16 rounded-full">
+          <div>
+            <h3 class="font-semibold text-gray-900">${student.name}</h3>
+            <p class="text-sm text-gray-600">${student.course} @ ${student.college}</p>
+            <div class="flex flex-wrap gap-2 mt-2">
+              ${student.skills.slice(0, 2).map(skill => 
+                `<span class="px-2 py-1 text-xs bg-green-100 text-green-700 rounded-full">${skill}</span>`
+              ).join('')}
+            </div>
+          </div>
+        </div>
+      `;
+
+      card.addEventListener('click', () => showProfileModal(student));
+      return card;
+    }
+
+    // Function to handle connect button click
+    function handleConnect(button, student) {
+      if (student.connectionStatus === 'Connect') {
+        student.connectionStatus = 'Pending';
+        button.textContent = 'Pending';
+        button.classList.remove('bg-green-600', 'hover:bg-green-700');
+        button.classList.add('bg-yellow-600', 'hover:bg-yellow-700');
+        
+        // Show alert message
+        alert(`Connection request sent to ${student.name}! They will be notified of your request.`);
+      }
+    }
+
+    // Updated function to show profile modal
+    function showProfileModal(student) {
+      const modal = document.createElement('div');
+      modal.className = 'fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50';
+      modal.innerHTML = `
+        <div class="bg-white rounded-xl p-6 max-w-2xl w-full mx-4 max-h-90vh overflow-y-auto">
+          <div class="flex justify-end">
+            <button class="close-modal text-gray-500 hover:text-gray-700">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          <div class="flex flex-col md:flex-row gap-6">
+            <div class="md:w-1/3">
+              <img src="${student.image}" alt="${student.name}" class="w-full rounded-lg">
+              <div class="mt-4 space-y-2">
+                <button class="connect-btn w-full py-2 ${
+                  student.connectionStatus === 'Connect' 
+                    ? 'bg-green-600 hover:bg-green-700' 
+                    : 'bg-yellow-600 hover:bg-yellow-700'
+                } text-white rounded-lg transition">
+                  ${student.connectionStatus}
+                </button>
+                <button class="w-full py-2 border border-green-600 text-green-600 rounded-lg hover:bg-green-50 transition">
+                  Message
+                </button>
+              </div>
+            </div>
+            <div class="md:w-2/3">
+              <h2 class="text-2xl font-bold text-gray-900 mb-2">${student.name}</h2>
+              <p class="text-gray-600 mb-4">${student.course} @ ${student.college}</p>
+              <div class="mb-4">
+                <h3 class="font-semibold text-gray-900 mb-2">About</h3>
+                <p class="text-gray-700">${student.about}</p>
+              </div>
+              <div class="mb-4">
+                <h3 class="font-semibold text-gray-900 mb-2">Skills</h3>
+                <div class="flex flex-wrap gap-2">
+                  ${student.skills.map(skill => 
+                    `<span class="px-3 py-1 bg-green-100 text-green-700 rounded-full">${skill}</span>`
+                  ).join('')}
+                </div>
+              </div>
+              <div>
+                <h3 class="font-semibold text-gray-900 mb-2">Projects</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  ${student.projects.map(project => 
+                    `<div class="p-3 bg-gray-50 rounded-lg">${project}</div>`
+                  ).join('')}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+
+      // Add connect button functionality
+      const connectBtn = modal.querySelector('.connect-btn');
+      connectBtn.addEventListener('click', () => handleConnect(connectBtn, student));
+
+      // Close modal functionality
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal || e.target.closest('.close-modal')) {
+          modal.remove();
+        }
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.parentElement) {
+          modal.remove();
+        }
+      });
+
+      document.body.appendChild(modal);
+    }
+
+    // Initialize student cards
+    document.addEventListener('DOMContentLoaded', () => {
+      const studentsList = document.getElementById('students-list');
+      students.forEach(student => {
+        studentsList.appendChild(createStudentCard(student));
+      });
+    });
+
+    // Animate elements on scroll
+    function animateOnScroll() {
+      const elements = document.querySelectorAll('.student-card');
+      elements.forEach((element, index) => {
+        const rect = element.getBoundingClientRect();
+        if (rect.top < window.innerHeight) {
+          setTimeout(() => {
+            element.classList.add('animate-fadeInUp');
+          }, index * 100);
+        }
+      });
+    }
+
+    window.addEventListener('scroll', animateOnScroll);
+    window.addEventListener('load', animateOnScroll);
+  </script>
+</body>
+
+</html>
